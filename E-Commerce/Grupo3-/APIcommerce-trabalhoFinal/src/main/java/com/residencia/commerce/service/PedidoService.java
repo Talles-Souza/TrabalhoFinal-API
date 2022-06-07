@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.residencia.commerce.dto.EnderecoDTO;
 import com.residencia.commerce.dto.PedidoDTO;
 import com.residencia.commerce.entity.Cliente;
 import com.residencia.commerce.entity.ItemPedido;
@@ -28,6 +27,9 @@ public class PedidoService {
 	ItemPedidoRepository itemPedidoRepository;
 	@Autowired
 	EnderecoService enderecoService;
+	@Autowired
+	EmailService emailService;
+
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -42,9 +44,12 @@ public class PedidoService {
 		return listaPedidosDTO;
 	}
 
-	public PedidoDTO findPedidoById(Integer id) {
-		return pedidoRepository.findById(id).isPresent() ? converterEntityToDTO(pedidoRepository.findById(id).get())
-				: null;
+	public String confirmarPedido(Integer id) {
+		Optional<Pedido> pedido = pedidoRepository.findById(id);
+		Optional<ItemPedido> itemPedido = itemPedidoRepository.findById(id);
+		emailService.sendMail(pedido, itemPedido);
+		return "Pedido finalizado com sucesso!";
+		
 	}
 
 	public PedidoDTO savePedido(PedidoDTO pedidoDTO) {
@@ -64,6 +69,15 @@ public class PedidoService {
 	 * 
 	 * return converterEntityToDTO(pedido); }
 	 */
+	public PedidoDTO findPedidoById(Integer id) {
+		return pedidoRepository.findById(id).isPresent() ? converterEntityToDTO(pedidoRepository.findById(id).get())
+				: null;
+		
+		
+		
+		
+		
+	}
 
 	public PedidoDTO updatePedido(PedidoDTO pedidoDTO) {
 		Pedido pedido = pedidoRepository.save(ConverteDTOToEntidade(pedidoDTO));
@@ -100,6 +114,7 @@ public class PedidoService {
 		// pedidoDTO.getClienteDTO().setIdCliente(pedido.getCliente().getIdCliente());
 		return pedidoDTO;
 	}
+	
 
 	// CONFIGURAR DE COMO ENVIAREMOS O EMAIL, E FAZER O METODO PARA ENVIAR O
 	// EMAIL....
