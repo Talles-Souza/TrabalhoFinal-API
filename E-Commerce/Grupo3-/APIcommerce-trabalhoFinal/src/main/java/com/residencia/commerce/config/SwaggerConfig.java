@@ -14,12 +14,12 @@ public class SwaggerConfig {
 	@Bean
 	  public OpenAPI springShopOpenAPI() {
 	      return new OpenAPI()
-	              .info(new Info().title("e-commerce")
-	              .description("Modelo de uma API e-commerce do grupo 3 proposto pelo Serratec.")
+	              .info(new Info().title("Api E-commerce")
+	              .description("Modelo de uma API e-commerce do grupo 3 proposta pela matéria de Desenvolvimento de API Restful do Serratec.")
 	              .version("4.14.1.RELEASE")
 	              .license(new License().name("Apache 2.0").url("http://springdoc.org")))
 	              .externalDocs(new ExternalDocumentation()
 	              .description("e-commerce Documentation")
-	              .url("https://github.com/Talles-Souza/Apoio"));
+	              .url("https://github.com/Talles-Souza/TrabalhoFinal-Api"));
 	  }
 }
