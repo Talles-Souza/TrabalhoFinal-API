@@ -3,6 +3,7 @@ package com.residencia.commerce.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,8 @@ public class Pedido{
 	@NotNull(message = "O campo está vazio")
 	private Boolean statusPedido;
 
-	@OneToMany(mappedBy = "pedido")
+	@OneToMany(targetEntity = ItemPedido.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id_pedido")
 	private List<ItemPedido> itemPedidoList;
 
 	@ManyToOne

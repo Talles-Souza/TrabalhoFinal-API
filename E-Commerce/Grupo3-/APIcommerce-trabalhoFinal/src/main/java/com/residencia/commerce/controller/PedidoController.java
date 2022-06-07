@@ -50,6 +50,11 @@ public class PedidoController implements ResponseApiPedido {
 		PedidoDTO novoPedido = pedidoService.savePedido(pedidoDTO);
 		return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
 	}
+	@GetMapping("/confirmar/{id}")
+	public ResponseEntity<String> confirmarPedido(@PathVariable Integer id) {
+		String novoPedido = pedidoService.confirmarPedido(id);
+		return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
+	}
 
 	public ResponseEntity<PedidoDTO> updatePedido(@RequestBody @Valid PedidoDTO pedidoDTO) {
 		PedidoDTO pedidoAtualizado = pedidoService.findPedidoById(pedidoDTO.getIdPedido());
@@ -58,30 +63,10 @@ public class PedidoController implements ResponseApiPedido {
 		else
 			return new ResponseEntity<>(pedidoService.updatePedido(pedidoDTO), HttpStatus.OK);
 	}
-	/*
-	 * @PutMapping("/pedido")
-	 * 
-	 * @Operation(summary="Atualizar os dados de pedido", description =
-	 * "Pedido atualizado")
-	 * 
-	 * @ApiResponses(value = {
-	 * 
-	 * @ApiResponse(responseCode = "200", description = "Atualizado com sucesso"),
-	 * 
-	 * @ApiResponse(responseCode = "400", description = "ID Inválido"),
-	 * 
-	 * @ApiResponse(responseCode = "403", description =
-	 * "Você não tem permissão para acessar recurso"),
-	 * 
-	 * @ApiResponse(responseCode = "404", description = "Recurso não encontrado")})
-	 * public ResponseEntity<PedidoDTO> confirmarPedido(@RequestBody @Valid
-	 * PedidoDTO pedidoDTO){ PedidoDTO pedidoAtualizado =
-	 * pedidoService.findPedidoById(pedidoDTO.getIdPedido()); if (null ==
-	 * pedidoAtualizado) throw new
-	 * NoSuchElementFoundException("Não foi possivel atualizar Pedido com este id "
-	 * ); else return new ResponseEntity<>(pedidoService.updatePedido(pedidoDTO),
-	 * HttpStatus.OK); }
-	 */
+	
+	
+	
+	
 
 	public ResponseEntity<String> deletePedido(@PathVariable Integer id) {
 		PedidoDTO PedidoAtualizado = pedidoService.findPedidoById(id);

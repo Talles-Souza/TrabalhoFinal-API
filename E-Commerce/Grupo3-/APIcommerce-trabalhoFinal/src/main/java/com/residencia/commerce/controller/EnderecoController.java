@@ -73,9 +73,9 @@ public class EnderecoController implements ResponseApiEndereco {
     
     
     //Testando o metado ainda, precisamos colocar para funcionar
-    public ResponseEntity<CepDTO> SalvarCep(@PathVariable String cep) {
-    	CepDTO cepDTO = enderecoService.consultarCepDTO(cep);
-    	EnderecoDTO cepDTO1 = enderecoService.saveCep(cep);
+    public ResponseEntity<EnderecoDTO> SalvarCep(@PathVariable String cep, EnderecoDTO enderecoDTO) {
+    	//CepDTO cepDTO = enderecoService.consultarCepDTO(cep);
+    	EnderecoDTO cepDTO = enderecoService.saveCep(cep,enderecoDTO);
     	
     	return new ResponseEntity<>(cepDTO, HttpStatus.OK);
     }

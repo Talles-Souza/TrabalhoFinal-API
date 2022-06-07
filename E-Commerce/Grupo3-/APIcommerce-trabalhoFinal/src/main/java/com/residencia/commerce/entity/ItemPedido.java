@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido {
 	@Id
@@ -21,24 +23,20 @@ public class ItemPedido {
 	private Integer quantidadeItemProduto;
 
 	@Column(name = "preco_venda")
-	@NotNull(message = "O campo está vazio")
+	//@NotNull(message = "O campo está vazio")
 	private Double precoVendaItemPedido;
 
 	@Column(name = "percentual_desconto")
-	@NotNull(message = "O campo está vazio")
+	//@NotNull(message = "O campo está vazio")
 	private Double percentualDescontoItemPedido;
 
 	@Column(name = "valor_bruto")
-	@NotNull(message = "O campo está vazio")
+	//@NotNull(message = "O campo está vazio")
 	private Double valorBrutoItemPedido;
 
 	@Column(name = "valor_liquido")
-	@NotNull(message = "O campo está vazio")
+	//@NotNull(message = "O campo está vazio")
 	private Double valorLiquidoItemPedido;
-
-	@ManyToOne
-	@JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido")
-	private Pedido pedido;
 
 	@ManyToOne 
 	@JoinColumn(name = "id_produto", referencedColumnName = "id_produto")
@@ -99,6 +97,7 @@ public class ItemPedido {
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
+	
 
 	@Override
 	public String toString() {

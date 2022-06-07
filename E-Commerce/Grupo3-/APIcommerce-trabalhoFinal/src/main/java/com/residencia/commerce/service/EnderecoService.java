@@ -84,7 +84,7 @@ public class EnderecoService {
 		return cepDTO;
 
 	}
-	 // Local do Cep // esses dois métodos sao para salvar endereço consultando cep, mas ainda nao conseguimos fazer....
+	 
 	
 	public Endereco CepDTOParaEndereco(CepDTO cepDTO) {
 		Endereco endereco = new Endereco();
@@ -110,7 +110,10 @@ public class EnderecoService {
 		return endereco;
 	}
 
-	public EnderecoDTO saveCep(String cep) {
-		return converterEntityToDTO(enderecoRepository.save(CepDTOParaEndereco(consultarCepDTO(cep))));
+	public EnderecoDTO saveCep(String cep, EnderecoDTO enderecoDTO) {
+		Endereco cepEnd = CepDTOParaEndereco(consultarCepDTO(cep));
+		cepEnd.setNumeroEndereco(enderecoDTO.getNumeroEndereco());
+		cepEnd.setComplemetnoEndereco(enderecoDTO.getComplemetnoEndereco());
+		return converterEntityToDTO(enderecoRepository.save(cepEnd));
 	}
 }

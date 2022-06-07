@@ -4,11 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
+import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.residencia.commerce.dto.ItemPedidoDTO;
 import com.residencia.commerce.dto.PedidoDTO;
 import com.residencia.commerce.entity.Cliente;
 import com.residencia.commerce.entity.ItemPedido;
@@ -30,6 +30,8 @@ public class PedidoService {
 	@Autowired
 	EmailService emailService;
 
+	@Autowired
+	ItemPedidoService itemPedidoService;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -45,38 +47,29 @@ public class PedidoService {
 	}
 
 	public String confirmarPedido(Integer id) {
-		Optional<Pedido> pedido = pedidoRepository.findById(id);
-		Optional<ItemPedido> itemPedido = itemPedidoRepository.findById(id);
+		Pedido pedido = pedidoRepository.findById(id).get();
+		ItemPedido itemPedido = itemPedidoRepository.findById(id).get();
 		emailService.sendMail(pedido, itemPedido);
 		return "Pedido finalizado com sucesso!";
-		
+
 	}
 
 	public PedidoDTO savePedido(PedidoDTO pedidoDTO) {
 		Date data = new Date();
 		pedidoDTO.setDataPedido(data);
+
+		for (ItemPedidoDTO item : pedidoDTO.getItemPedidoList()) {
+			itemPedidoService.calculaPercentual(item);
+		}
 		Pedido pedido = pedidoRepository.save(ConverteDTOToEntidade(pedidoDTO));
+
 		return converterEntityToDTO(pedido);
 	}
 
-	// ESSE É O METODO PARA CRIAR EMAIL, FORMATAR COMO ENVIAR O EMAIL MAIS ABAIXO
-	/*
-	 * public PedidoDTO confirmarPedido(PedidoDTO pedidoDTO) { Date data = new
-	 * Date(); pedidoDTO.setDataPedido(data); Pedido pedido1
-	 * =ConverteDTOToEntidade(pedidoDTO); try { gerarEmail(pedido1); } catch
-	 * (Exception e) { e.printStackTrace(); } Pedido pedido =
-	 * pedidoRepository.save(pedido1);
-	 * 
-	 * return converterEntityToDTO(pedido); }
-	 */
 	public PedidoDTO findPedidoById(Integer id) {
 		return pedidoRepository.findById(id).isPresent() ? converterEntityToDTO(pedidoRepository.findById(id).get())
 				: null;
-		
-		
-		
-		
-		
+
 	}
 
 	public PedidoDTO updatePedido(PedidoDTO pedidoDTO) {
@@ -89,7 +82,7 @@ public class PedidoService {
 		pedidoRepository.delete(pedido);
 	}
 
-	private Pedido ConverteDTOToEntidade(PedidoDTO pedidoDTO) {
+	public Pedido ConverteDTOToEntidade(PedidoDTO pedidoDTO) {
 		Pedido pedido = new Pedido();
 		Cliente cliente = new Cliente();
 		pedido.setIdPedido(pedidoDTO.getIdPedido());
@@ -97,60 +90,28 @@ public class PedidoService {
 		pedido.setDataEntregaPedido(pedidoDTO.getDataEntregaPedido());
 		pedido.setDataEnvioPedido(pedidoDTO.getDataEnvioPedido());
 		pedido.setStatusPedido(pedidoDTO.getStatusPedido());
-		// pedido.getCliente().setIdCliente(pedidoDTO.getClienteDTO().getIdCliente());
+
+		pedido.setItemPedidoList(
+				pedidoDTO.getItemPedidoList().stream().map(itemPedidoService::ConverteDTOToEntidade).collect(toList()));
+
 		cliente = clienteService
 				.ConverteDTOToEntidade(clienteService.findClienteById(pedidoDTO.getClienteDTO().getIdCliente()));
 		pedido.setCliente(cliente);
 		return pedido;
 	}
 
-	private PedidoDTO converterEntityToDTO(Pedido pedido) {
+	public PedidoDTO converterEntityToDTO(Pedido pedido) {
 		PedidoDTO pedidoDTO = new PedidoDTO();
+		pedidoDTO.setIdPedido(pedido.getIdPedido());
 		pedidoDTO.setDataPedido(pedido.getDataPedido());
 		pedidoDTO.setDataEntregaPedido(pedido.getDataEntregaPedido());
 		pedidoDTO.setIdPedido(pedido.getIdPedido());
 		pedidoDTO.setDataEnvioPedido(pedido.getDataEnvioPedido());
 		pedidoDTO.setStatusPedido(pedido.getStatusPedido());
-		// pedidoDTO.getClienteDTO().setIdCliente(pedido.getCliente().getIdCliente());
+		pedidoDTO.setItemPedidoList(
+				pedido.getItemPedidoList().stream().map(itemPedidoService::converterEntityToDTO).collect(toList()));
+
 		return pedidoDTO;
 	}
-	
 
-	// CONFIGURAR DE COMO ENVIAREMOS O EMAIL, E FAZER O METODO PARA ENVIAR O
-	// EMAIL....
-
-	/*
-	 * public String gerarEmail(Pedido pedido) throws Exception {
-	 * 
-	 * Optional<ItemPedido> itemPedido =
-	 * itemPedidoRepository.findById(pedido.getIdPedido()); String html =
-	 * "<h2>Pedido ID: " + pedido.getIdPedido() + " Processado</h2>"; ItemPedido
-	 * item = new ItemPedido(); EnderecoDTO end =
-	 * enderecoService.findEnderecoById(item.getIdItemPedido());
-	 * 
-	 * html += "<br>"; html += "<p>Data do Pedido: " +
-	 * simpleDateFormat.format(pedido.getDataPedido()) + "</p>"; html +=
-	 * "<p>Data do Envio: " + simpleDateFormat.format(pedido.getDataEnvioPedido())
-	 * +"</p>"; html += "<p>Data da Entrega(previsão): " +
-	 * simpleDateFormat.format(item.) +"</p>"; html += "<br>"; html +=
-	 * "<h3>Produtos:</h3>"; html += "<br>"; html += "<p>"+ itemPedido.toString()
-	 * +"</p>"; html += "<br>"; html += "<h3>Valores Totais:</h3>"; html +=
-	 * "<p>Valor Bruto do Pedido: R$" + String.format("%.2f",
-	 * pedido.getValorBrutoItemPedido()) + "</p>"; html +=
-	 * "<p>Valor de Desconto do Pedido: R$" + String.format("%.2f",
-	 * pedido.getPercentualDescontoItemPedido()) + "</p>"; html +=
-	 * "<p><strong>Valor Liquido do Pedido: R$" + String.format("%.2f",
-	 * pedido.getValorLiquidoItemPedido()) + "</strong></p>"; html += "<br>"; html
-	 * += "<h3>Dados do cliente:</h3>"; html += "<br>"; html +=
-	 * "<h3>Cliente: </h3>"; html += "<p>"+
-	 * (clienteService.converterEntityToDTO(pedido.getCliente())).toString()
-	 * +"</p>"; html += "<br>"; html += "<h3>Endereço:</h3>"; html += "<p>" +
-	 * (enderecoService.findEnderecoById(end.getIdEndereco()));
-	 * 
-	 * return html;
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 }

@@ -27,12 +27,12 @@ public class Endereco {
 
 	@Column(name = "cep")
 	@NotBlank(message = "O cep é obrigatório")
-	@Length(min = 8, max = 8, message = "O cep deverá ter no minímo 3 {mim} caracteres e no máximo {max}")
+	@Length(min = 8, max = 9, message = "O cep deverá ter no minímo 3 {mim} caracteres e no máximo {max}")
 	@Pattern(regexp = "\\d{5}-?\\d{3}", message = "O cep deve respeitar o formato 'XXXXX-XXX'.")
 	private String cepEndereco;
 
 	@Column(name = "rua")
-	@NotBlank(message = "A rua é obrigatória")
+	//@NotBlank(message = "A rua é obrigatória")
 	@Length(min = 3, max = 35, message = "A rua deverá ter no minímo 3 {mim} caracteres")
 	private String ruaEndereco;
 
@@ -41,15 +41,15 @@ public class Endereco {
 	private String bairroEndereco;
 
 	@Column(name = "cidade")
-	@NotBlank(message = "A cidade é obrigatória")
+	//@NotBlank(message = "A cidade é obrigatória")
 	private String cidadeEndereco;
 
 	@Column(name = "numero")
-	@NotNull(message = "O numero é obrigatório")
+	//@NotNull(message = "O numero é obrigatório")
 	private Integer numeroEndereco;
 
 	@Column(name = "complemento")
-	@NotBlank(message = "O complemento é obrigatório")
+	//@NotBlank(message = "O complemento é obrigatório")
 	private String complemetnoEndereco;
 
 	@Column(name = "uf")

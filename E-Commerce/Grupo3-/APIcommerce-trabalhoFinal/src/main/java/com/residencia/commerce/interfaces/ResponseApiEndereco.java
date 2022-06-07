@@ -74,5 +74,5 @@ public interface ResponseApiEndereco {
 			@ApiResponse(responseCode = "404", description = "Não existe endereço com esse CEP"),
 			@ApiResponse(responseCode = "403", description = "Recurso não encontrado")})
 	@PostMapping("/cep/{cep}")
-	public ResponseEntity<CepDTO> SalvarCep(@PathVariable String cep);
+	public ResponseEntity<EnderecoDTO> SalvarCep(@PathVariable String cep, EnderecoDTO enderecoDTO);
 }

@@ -2,8 +2,10 @@ package com.residencia.commerce.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.residencia.commerce.entity.ItemPedido;
 
 public class PedidoDTO {
 
@@ -22,7 +24,8 @@ public class PedidoDTO {
 	
 	private ClienteDTO clienteDTO;
 	
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	private List<ItemPedidoDTO> itemPedidoList;
+
 
 	public Integer getIdPedido() {
 		return idPedido;
@@ -71,5 +74,14 @@ public class PedidoDTO {
 	public void setClienteDTO(ClienteDTO clienteDTO) {
 		this.clienteDTO = clienteDTO;
 	}
+
+	public List<ItemPedidoDTO> getItemPedidoList() {
+		return itemPedidoList;
+	}
+
+	public void setItemPedidoList(List<ItemPedidoDTO> itemPedidoList) {
+		this.itemPedidoList = itemPedidoList;
+	}
+
 
 }

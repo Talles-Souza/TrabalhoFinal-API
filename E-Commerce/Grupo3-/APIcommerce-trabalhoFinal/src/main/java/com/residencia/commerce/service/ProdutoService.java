@@ -57,7 +57,7 @@ public class ProdutoService {
 
 	}
 
-	private Produto ConverteDTOToEntidade(ProdutoDTO produtoDTO) {
+	public Produto ConverteDTOToEntidade(ProdutoDTO produtoDTO) {
 		Produto produto = new Produto();
 		produto.setIdProduto(produtoDTO.getIdProduto());
 		produto.setDataCadastroProduto(produtoDTO.getDataCadastroProduto());
@@ -69,7 +69,7 @@ public class ProdutoService {
 		return produto;
 	}
 
-	private ProdutoDTO converterEntityToDTO(Produto produto) {
+	public ProdutoDTO converterEntityToDTO(Produto produto) {
 		ProdutoDTO produtoDTO = new ProdutoDTO();
 		produtoDTO.setDataCadastroProduto(produto.getDataCadastroProduto());
 		produtoDTO.setDescricao(produto.getDescricao());
@@ -78,7 +78,7 @@ public class ProdutoService {
 		produtoDTO.setNomeProduto(produto.getNomeProduto());
 		produtoDTO.setQtdEstoqueProduto(produto.getQtdEstoqueProduto());
 		produtoDTO.setValorUnitarioProduto(produto.getValorUnitarioProduto());
-		//produtoDTO.setCategoriaDTO(categoriaService.converterEntityToDTO(produto.getCategoria()));
+		
 		return produtoDTO;
 	}
 
